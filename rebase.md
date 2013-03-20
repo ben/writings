@@ -1,17 +1,17 @@
 > Travel through time with Git
 
-> # Rewrite Your History
+> # Change the Past
 
 > Of all the things Git can do, perhaps one of the most feared is the ability to rewrite history.
 
 The amount of control git gives to its users is what sets it apart from other version-control systems.
-Users of other systems, where history is permanent and immutable, generally have two reactions upon discovering the `rebase` command: horror that such a thing even exists, and confusion as to why anyone would want to use it.
+Users of Subversion or Mercurial, where history is permanent and immutable, generally have two reactions upon discovering the `rebase` command: horror that such a thing even exists, and confusion as to why anyone would want to use it.
 
 ## Why do I want this?
 
-If you've spent much time working on version-controlled software, you've probably been in at least one of these situations:
+If you've spent much time working on software, you've probably been in at least one of these situations:
 
-* You're working on a branch, but find yourself with two chunks of work that should be separate.
+* You're working on a feature, but find yourself with two chunks of work that should be separate.
 * You forgot to delete a file, and a two-line bug fix got spread across 3 commits.
 * You had to make a new commit that *only* undoes some changes introduced in a previous commit. 
 * You started working on a bugfix, which later turned into a deploy-it-yesterday hotfix.
@@ -44,7 +44,7 @@ And here's what the history looks like afterward:
 
 ![](trivial-1b.png)
 
-It helps to think of commits as **a collection of changes** rather than a collection of fixed versions. 
+It helps to think of commits as **a collection of changes** rather than a series of fixed versions. 
 The `c` and `d` commits have been re-made as `c'` and `d'`, such that their *changes* are applied on top of `f`.
 
 ## A slightly less trivial example
@@ -81,8 +81,7 @@ If your branches have been separated for a while, this can be a daunting task; d
 It's the kind of situation that make developers run screaming from their keyboards.
 
 Rebase, on the other hand, applies commits one at a time.
-If any of them conflict, you get to review them as they're happening, and take corrective action.
-Let's take a look at 
+If any of them conflict, you get to review them as they're applied, and take corrective action.
 
 * the specific changes that conflicted, a commit message that describes what was changed and why, and the names of the people who made the conflicting changes in the first place  
 
@@ -94,7 +93,36 @@ Let's take a look at
 
 ## A Non-trivial Example
 
-* Split a branch into two
+Suppose you're working on a feature using a branch, and it's a ways from being finished.
+But you notice that part of what you've done is actually a completely separate fix, that the rest of the team needs right now.
+
+![](non-trivial-a.png)
+
+You can use interactive rebase to merge the "accidental" fix into master, while keeping the in-progress feature separate.
+Let's suppose that commits `e` and `f` contain this fix.
+First, we create a new branch to hold the fix:
+
+	$ git checkout -b fix
+
+Next, we use an interactive rebase to keep only the commits related to the fix, and change it so they apply on top of `master`:
+
+	$ git rebase -i master
+
+Here's what we have so far: 
+
+![](non-trivial-b.png)
+
+Now we can merge the fix back into master, and rebase our feature on top of it:
+
+	$ git checkout master
+	$ git merge fix
+	$ git checkout feature
+	$ git rebase -i master
+
+We use an interactive rebase to remove the old `e` and `f` commits.
+Here's the end result:
+
+![](non-trivial-c.png)
 
 ## It's really not that scary
 
@@ -130,7 +158,8 @@ None of the changes rebase is making are shared with anybody else until you deci
 ## Publicity
 
 One simple guideline will save you from worlds of pain: **only change history that has never left your machine.**
-Git helps you with this; if your rebase changes history that exists in the origin, it helpfully warns you:
+If you've added 10 commits since you pushed, try to keep your rebasing to only those 10 commits.
+Git helps you with this; if your push would overwrite history on the origin, it helpfully warns you:
 
 	$ git push
 	To https://url.to/origin/repo
@@ -139,10 +168,10 @@ Git helps you with this; if your rebase changes history that exists in the origi
 
 A simple `git push -f` will get around this, but the warning should be enough to keep people from making mistakes.
 
-There are some situations where you *do* want to change history that exists elsewhere, though.
+Still, there are some situations where you *do* want to change history that exists elsewhere.
 One example is the removal of sensitive information from a repository.
 Let's walk through an example.
-Here's some simple history
+Here's some simple history:
 
 ![](public-a.png)
 
