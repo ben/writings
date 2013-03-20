@@ -83,13 +83,11 @@ It's the kind of situation that make developers run screaming from their keyboar
 Rebase, on the other hand, applies commits one at a time.
 If any of them conflict, you get to review them as they're applied, and take corrective action.
 
-* the specific changes that conflicted, a commit message that describes what was changed and why, and the names of the people who made the conflicting changes in the first place  
-
-* what to do with 
+**TODO**
 
 ## Interactivity
 
-* script git runs to make new history
+**TODO:** script git runs to make new history
 
 ## A Non-trivial Example
 
