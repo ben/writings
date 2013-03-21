@@ -75,8 +75,7 @@ Here's what it looks like afterward:
 
 ## Conflicts
 
-At its heart, rebase is a merge operation.
-The bad news is that there will occasionally be conflicts.
+At its heart, rebase is a merge operation, which inevitably means merge conflicts.
 The good news is that rebase actually makes it easier to deal with them!
 
 When you do a standard `git merge`, you have to resolve all the conflicts at once.
@@ -85,6 +84,7 @@ It's the kind of situation that make developers run screaming from their keyboar
 
 Rebase, on the other hand, applies commits one at a time.
 If any of them conflict, you get to review them as they're applied, and correct the problems.
+If it gets to be too much, you can always change your mind: `git rebase --abort` resets your repository back to how it was before it started.
 
 ## Interactivity
 
@@ -249,5 +249,20 @@ So all he has to do is change his `master` branch to point to `origin/master`:
 
 ## Fin
 
-* wrap up
-* references
+By now it should be clear that this isn't just another feature.
+It's transformative, and changes the way you relate to version control.
+
+VCS tools used to be write-only, like a typewriter – once the ink hit the paper, the only options you had were to keep typing or throw the page away.
+The ability to rebase is like getting a text editor.
+Now you can fix typos, check your spelling, and even restructure entire documents before it becomes permanent.
+Now your history is rewritable, and you have the power to make it better.
+
+Rebase isn't without its downsides, though.
+It can help make the history more linear and understandable, but it also erases the messiness, the record of *what actually happened* while the software was being developed.
+
+No matter which side of this debate you come down on, the good news here is that **you** are the one in charge of your history. 
+Do you want periodic merges in your log, or do you prefer it to be linear?
+Do you want an accurate history of what happened, or an idealized legend of correct actions?
+It's entirely up to you.
+
+**TODO:** references
