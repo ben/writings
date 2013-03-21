@@ -5,7 +5,7 @@
 > Of all the things Git can do, perhaps one of the most feared is the ability to rewrite history.
 
 The amount of control git gives to its users is what sets it apart from other version-control systems.
-Users of Subversion or Mercurial, where history is permanent and immutable, generally have two reactions upon discovering the `rebase` command: horror that such a thing even exists, and confusion as to why anyone would want to use it.
+Users of Subversion or Mercurial, where history is permanent and immutable, generally have two reactions upon discovering the `rebase` command: horror that such a thing even exists, and confusion as to why anyone would want it in the first place.
 
 ## Why do I want this?
 
@@ -13,7 +13,7 @@ If you've spent much time working on software, you've probably been in at least 
 
 * You're working on a feature, but find yourself with two chunks of work that should be separate.
 * You forgot to delete a file, and a two-line bug fix got spread across 3 commits.
-* You had to make a new commit that *only* undoes some changes introduced in a previous commit. 
+* You had to make a new commit that *only* undoes some changes introduced in a previous commit.
 * You started working on a bugfix, which later turned into a deploy-it-yesterday hotfix.
 
 Rebase can help you solve these problems, or avoid them entirely.
@@ -22,14 +22,17 @@ It's much like using a word processor instead of a typewriter - you can edit you
 It's easiest to think about this by seeing it in action.
 Let's look at a couple of examples.
 
+*[
+A note on diagrams: green blocks are commits, and their arrows indicate "parenthood", so they point backward in time.
+The gray blocks are branch refs, and their arrows indicate the commit they refer to.
+Blue blocks are remote refs.
+]*
+
 ## A trivial example
 
 In this example, the `master` branch (which is shared with the whole team) and your own personal `experiment` branch (which only exists on your machine) have diverged somewhat.
 
 ![](trivial-1a.png)
-
-*[Diagram key: green blocks are commits. 
-The arrows indicate "parenthood", so they point backward in time. The gray blocks are branch refs.]*
 
 Let's suppose that, for whatever reason, you don't want a merge commit.
 Rebase allows you to bring in the changes from the `experiment` branch while keeping the history linear.
@@ -44,7 +47,7 @@ And here's what the history looks like afterward:
 
 ![](trivial-1b.png)
 
-It helps to think of commits as **a collection of changes** rather than a series of fixed versions. 
+It helps to think of commits as **a collection of changes** rather than a series of fixed versions.
 The `c` and `d` commits have been re-made as `c'` and `d'`, such that their *changes* are applied on top of `f`.
 
 ## A slightly less trivial example
@@ -81,13 +84,50 @@ If your branches have been separated for a while, this can be a daunting task; d
 It's the kind of situation that make developers run screaming from their keyboards.
 
 Rebase, on the other hand, applies commits one at a time.
-If any of them conflict, you get to review them as they're applied, and take corrective action.
-
-**TODO**
+If any of them conflict, you get to review them as they're applied, and correct the problems.
 
 ## Interactivity
 
-**TODO:** script git runs to make new history
+You could also think of rebase as a scripted series of invocations of `git cherry-pick`.
+In fact, there's a way to edit the script before it runs.
+Typing `git rebase --interactive` (or the shorter `-i`) drops the rebase script into your text editor:
+
+```txt
+pick 6ad9071 Work on feature ABC
+pick 5742a11 Fix bug #24
+pick fd68d8d Work on feature DEF
+pick a4806b0 Fix makefile
+
+# Rebase 83b50a7..a4806b0 onto 83b50a7
+#
+# Commands:
+#  p, pick = use commit
+#  r, reword = use commit, but edit the commit message
+#  e, edit = use commit, but stop for amending
+#  s, squash = use commit, but meld into previous commit
+#  f, fixup = like "squash", but discard this commit's log message
+#  x, exec = run command (the rest of the line) using shell
+#
+# These lines can be re-ordered; they are executed from top to bottom.
+#
+# If you remove a line here THAT COMMIT WILL BE LOST.
+#
+# However, if you remove everything, the rebase will be aborted.
+#
+# Note that empty commits are commented out
+```
+
+Notice how git helpfully documents what you can do.
+The top few lines are the rebase script, which you have control over.
+
+This is where rebase's power really shines through.
+You can remove commits that you don't want, introduce new ones, or squash commits together where it makes more sense to have just one.
+You can change commit messages, or even the contents of the files committed.
+
+This is more than just aesthetics; it becomes even more useful when combined with other git features.
+Many projects have the policy that all commits should pass the unit tests.
+This allows `git bisect` to be very useful for finding when problems were introduced.
+It also comes in handy with `cherry-pick` – extracting an atomic feature into just one commit allows it to be portable to another branch.
 
 ## A Non-trivial Example
 
@@ -96,7 +136,7 @@ But you notice that part of what you've done is actually a completely separate f
 
 ![](non-trivial-a.png)
 
-You can use interactive rebase to merge the "accidental" fix into master, while keeping the in-progress feature separate.
+You can use rebase to merge the "accidental" fix into master, while keeping the in-progress feature separate.
 Let's suppose that commits `e` and `f` contain this fix.
 First, we create a new branch to hold the fix:
 
@@ -106,7 +146,7 @@ Next, we use an interactive rebase to keep only the commits related to the fix, 
 
 	$ git rebase -i master
 
-Here's what we have so far: 
+Here's what we have so far:
 
 ![](non-trivial-b.png)
 
@@ -126,7 +166,7 @@ Here's the end result:
 
 The biggest worry people have when they learn about this feature is that they'll screw up.
 Relax; it's going to be fine.
-Looking at the diagrams above, you may notice that the original commits aren't gone, they're just harder to see. 
+Looking at the diagrams above, you may notice that the original commits aren't gone, they're just harder to see.
 
 Nothing is ever truly lost in a Git repository.
 History is built out of commits (which are immutable) and refs or branches (which change all the time).
