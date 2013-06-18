@@ -42,13 +42,10 @@ This dialect is called C99, and it's not supported as widely.
 Your choice of distribution method will help inform this decision – if you're distributing source code, you may need compatibility with compilers that can't handle C99, for instance.
 
 
-## Editors
-One's choice of text editor is a very personal matter.
-But it must be said that some editors are better at C than others.
+## Development tools
+There's a standard set of tools that you'll be needing to work with C, no matter what your environment is.
 
-**TODO**
-
-## Compilers
+### Compilers
 Sadly, computers don't execute C.
 At some point, someone or something is going to have to translate what you've written into binary instructions that will flow like water through the doped-silicon pathways of some stranger's computer.
 
@@ -61,12 +58,23 @@ The main thing here is to know which compilers your code will need to compile un
 This largely depends on your distribution strategy (see below). If your final product is built binaries, just pick a compiler and use it to the fullest.
 If your project is open-source and needs to actually *build* on strangers' computers, you'll need to test under (at least) the three dominant players: gcc, clang, and MSVC.
 
-Of the three, MSVC (as of Visual Studio 2012) is the most pedantic about code being C89.
+If you need to support more than one of these, it's worth considering using a meta-build tool such as **CMake** or **gyp**.
+These allow you to define your project in general terms (these are the source files, this is what the output name should be, etc.), and the tool can generate a variety of project files, and even build the system for you using the toolchain that's available.
+There's effort involved in writing the meta-project file, but it can more than pay for itself by providing access to many different environments.
+
+
+### Editors
+One's choice of text editor is a very personal matter, but it must be said that some editors are better at C than others.
+
+IDEs such as **Microsoft Visual Studio** or **XCode** can be very useful. They have extensive tools for graphical debugging, performance measurement, syntax-aware code navigation, and a host of other useful features.
+
+Raw-text powerhouses like **Emacs** and **Vim** are much better at raw text manipulation, with features like macro recording and 
 
 **TODO**
 
+## Process Tools
 
-## Unit Testing
+### Unit Testing
 Once you've written all that code, you probably want to make sure it does what you think it does.
 Unit testing has become a standard part of software discipline.
 While it's certainly an option to not have any automated testing at all, it's not a path commonly followed.
@@ -75,14 +83,14 @@ So you probably want unit tests.
 
 **TODO**
 
-## Dependency Management
+### Dependency Management
 
 **TODO**
 
-## Continuous Integration
+### Continuous Integration
 
 **TODO**
 
-## Working With Others
+### Working With Others
 
 **TODO**
