@@ -42,8 +42,9 @@ This dialect is called C99, and it's not supported as widely.
 Your choice of distribution method will help inform this decision – if you're distributing source code, you may need compatibility with compilers that can't handle C99, for instance.
 
 
-## Development tools
-There's a standard set of tools that you'll be needing to work with C, no matter what your environment is.
+## Tactical tools
+There's a standard set of tools that you'll be needing every day, no matter what your environment is.
+I like to call these *tactical tools*, since they may change over the life of a project, without materially changing the goal  or content of the project itself.
 
 ### Compilers
 Sadly, computers don't execute C.
@@ -66,13 +67,33 @@ There's effort involved in writing the meta-project file, but it can more than p
 ### Editors
 One's choice of text editor is a very personal matter, but it must be said that some editors are better at C than others.
 
-IDEs such as **Microsoft Visual Studio** or **XCode** can be very useful. They have extensive tools for graphical debugging, performance measurement, syntax-aware code navigation, and a host of other useful features.
+IDEs such as **Microsoft Visual Studio**, **Eclipse CDT** or **XCode** can be very useful.
+They have extensive tools for graphical debugging, performance measurement, syntax-aware code navigation, and a host of other useful features.
+These tools are designed around the edit-compile-run cycle, and common tasks are made very easy.
+Their main drawback is their specificity; it's difficult to get Visual Studio to work with another toolchain, or to compile a binary for Linux, for example.
 
-Raw-text powerhouses like **Emacs** and **Vim** are much better at raw text manipulation, with features like macro recording and 
+Raw-text powerhouses like **Emacs** and **Vim** are much better at raw text manipulation, with features like macro recording and ultimate customizability.
+But since they aren't tied to a particular toolchain, it takes a bit of monkeying to get them to support the same kind of features that IDEs do.
+The other side to this coin is their sheer flexibility; these editors allow you to customize nearly everything about their behavior, and they have rich ecosystems of plugins and extensions to prove it.
+
+**TODO: finish this paragraph? Is it useful?** 
+One great differentiator between these categories is symbol-based code navigation.
+
+### Debuggers
+**TODO**
+
+### Checkers
+**TODO: static**
+**TODO: valgrind**
+
+### Collaboration Tools
 
 **TODO**
 
-## Process Tools
+
+## Strategic Tools
+Writing and running code is what you're going to be doing every day, but there are several important practices that will help you succeed over a longer time span.
+I think of these as *strategic* because both their costs and benefits are felt in a different time-frame than their introduction.
 
 ### Unit Testing
 Once you've written all that code, you probably want to make sure it does what you think it does.
@@ -80,10 +101,7 @@ Unit testing has become a standard part of software discipline.
 While it's certainly an option to not have any automated testing at all, it's not a path commonly followed.
 
 So you probably want unit tests.
-
-**TODO**
-
-### Dependency Management
+The 
 
 **TODO**
 
@@ -91,6 +109,17 @@ So you probably want unit tests.
 
 **TODO**
 
-### Working With Others
+### Dependency Management
 
+**TODO**
+
+### Marketing
+
+## Learning
+**TODO**
+
+### CDecl
+http://cdecl.org/
+
+## Conclusion
 **TODO**
