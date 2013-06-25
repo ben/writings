@@ -72,6 +72,9 @@ These allow you to define your project in general terms (these are the source fi
 There's effort involved in writing and maintaining the meta-project file, but it can more than pay for itself by providing access to many different environments.
 This approach also lets you avoid maintaining multiple tool-specific project files, and allows people working on the code to choose the environment that works best for them.
 
+If you google for these things, you'll probably run across autotools.
+Try to think of it in the same terms as RCS or CVS; at this point in time, there's almost no reason to use a tool that byzantine and difficult, when so many better options exist.
+
 
 ### Editors
 One's choice of text editor is a very personal matter, but it must be said that some editors are better at C than others.
@@ -105,8 +108,8 @@ Using a meta-build tool, even if you're only planning on building with one compi
 Automated checking tools can catch many serious bugs before they even go into source control.
 These come in two flavors: static and dynamic.
 
-Static tools work by analyzing the source code without actually running it.
-You're actually running one of these already – compilers are pretty good at finding type errors, and not terribly bad at detecting certain other kinds of error.
+Static code analyzers work by parsing and crunching the source code without actually running it.
+You're actually using one of these already – compilers are pretty good at finding type errors, and not terribly bad at detecting certain other kinds of error, though they have their limits.
 There are others that are free; **scan-build** is included with clang (and is also available from inside Xcode), and Eclipse CDT includes **CODAN**, for example.
 Commercial tools also exist, such as **PC-Lint** and **PVS-Studio**.
 The main drawback of static analysis tools is their pedantry.
@@ -156,9 +159,11 @@ Unit testing has become a standard part of software discipline.
 While it's certainly an option to not have any automated testing at all, it's not a path commonly followed.
 
 So you probably want unit tests.
-Working in C means there isn't much in the language to leverage to make writing tests easier or more concise.
-So while you can start completely from scratch, I'd recommend using a framework.
-My recommendation is **Clar**, which requires Python to be installed, but parses your source code and builds the suites and runners for you, which makes it feel like you're writing in Ruby with no boilerplate.
+Working in C means there isn't much in the language to leverage to make writing those tests easier or more concise.
+You can start completely from scratch if you like, but I recommend using a framework.
+My personal favorite is **Clar**, which requires Python to be installed, but parses your source code and builds the suites and runners for you.
+This makes it feel like you're writing in Ruby with no boilerplate.
+Others are available if you don't like Clar's style; try **Check**, or **CUnit**.
 
 
 ### Continuous Integration
@@ -177,18 +182,45 @@ Other languages have made this really easy.
 Ruby has gems, Node has npm, C# has NuGet.
 Unfortunately, there isn't anything like this for C.
 Mostly this is because C is so structureless and malleable, and there's no *best* way to make a reusable library.
-Probably the most pragmatic way to take a dependency on an external library or toolkit is to pull in its source code using your version control tool (**git submodule** or the like), and compile it as part of your build.
-Every situation is different, and every library has a different way of building, so you'll have to do most of the legwork yourself.
+Probably the most pragmatic way to take a dependency on an external library or toolkit is to pull in its source code using your version control tool (**git submodules** or **mercurial subrepositories**), and compile it as part of your build.
+Every situation is different, and every library has its own unique way of building, so you'll have to do most of the legwork yourself.
 
 
 ## Learning
+Your journey down the path of C will not be without bumps.
+You'll stumble, you'll be confused, and the language will seem to fight you.
+C has become a small niche in the world of programming, so C-focused conferences, blogs, and magazines are few and far between, but there *are* resources to draw on.
 
+
+### Self-Guided Learning
+The materials at **cprogramming.com** are a good jumping-off point for sharpening your C skills.
+There are tutorials for every level, and sometimes learning a completely different application can help you think of your problems in a different way.
+
+Much of your programming day will be spent typing, so it's important (especially if you've chosen your text editor for efficiency) to get better.
+**typing.io** is a good place to build muscle memory for the unique statement patterns you'll find in C.
+
+
+### Asking Questions
+Probably the best way to ensure you get the help you need is to find a mentor.
+An old hand, a master practitioner can get you through many a hard day.
+
+If a C wizard is nowhere to be found, or you've left the bounds of your team's expertise, try **stackoverflow.com**.
+This is the single best technically-focused question-and-answer resource on the Internet, and C experts from around the world are waiting to help you out.
+It's also fun to help out other newbies while you're there.
 
 
 ### CDecl
+The declaration syntax for C can sometimes be confusing, and some of the grammatical rules are hard to remember.
+If you find yourself trapped in a maze of twisty little `const`s, all alike, you can use **cdecl** to find your way out.
+Cdecl is a command-line tool that translates between dense C syntax and mostly-plain English.
+You can install it on your workstation, or try it out at http://cdecl.org.
 
-http://cdecl.org/
+
+### Reading Code
+The best way to learn what good C code looks like is to read a lot of it.
+This is possible now like never before; many popular and high-quality code bases are completely open source, and access is free to anyone who cares to look.
+Try reading the code to **Redis**, or even one of the schedulers in the **Linux kernel**.
+Or browse the **C category on GitHub**
+
 
 ## Conclusion
-If all of this is overwhelming, well, good.
-Working with other humans is a complex problem, not easily solved by software, and there have been many failed attempts at finding the *one true way*.
