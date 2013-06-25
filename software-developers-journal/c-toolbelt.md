@@ -140,9 +140,8 @@ If your team consists of one person, or work in the same physical space, this pr
 But if neither of these facts is 100% true, you'll need some software to back you up.
 This is generally called *chat software*, and includes things like **IRC**, **Campfire**, and **HipChat**.
 
-If all of this is overwhelming, well, good.
-Human communication is a complex problem, not easily solved by software, and there have been many failed attempts at being the *one true way*.
-However, if you want a curated set of collaboration tools, a bundle of decisions that have already been made for you and wrapped up with a bow, you can find that too.
+The ecosystem here is both broad and deep.
+If you want a curated set of collaboration tools, a bundle of decisions that have already been made for you and wrapped up with a bow, you can find that too.
 Toolsets like **GitHub** have been crafted with a team workflow in mind, and will work very well if you stick to their constraints.
 Other packages, such as products from Atlassian or Microsoft, can be tailored to your specific needs.
 
@@ -157,25 +156,30 @@ Unit testing has become a standard part of software discipline.
 While it's certainly an option to not have any automated testing at all, it's not a path commonly followed.
 
 So you probably want unit tests.
-The 
+Working in C means there isn't much in the language to leverage to make writing tests easier or more concise.
+So while you can start completely from scratch, I'd recommend using a framework.
+My recommendation is **Clar**, which requires Python to be installed, but parses your source code and builds the suites and runners for you, which makes it feel like you're writing in Ruby with no boilerplate.
 
-**TODO**
 
 ### Continuous Integration
+Once you have a suite of automated tests, you'll want to run them as often as you can.
+Usually each developer will make sure their work doesn't break the tests before they push it to the rest of the team, but especially if your code is meant to compile and run in multiple environments, it's useful to have a machine do all the drudgery of checking every combination.
 
-**TODO**
+If your code is hosted on GitHub, **Travis CI** (which is free if your project is open source) will even run the tests script on every pull request, which is invaluable for accepting contributions from strangers.
+There are many other options, including **Jenkins**, **TeamCity**, and **Bamboo**.
+
 
 ### Dependency Management
 
-**TODO**
+**TODO?**
 
-### Marketing
 
 ## Learning
-**TODO**
+
 
 ### CDecl
 http://cdecl.org/
 
 ## Conclusion
-**TODO**
+If all of this is overwhelming, well, good.
+Working with other humans is a complex problem, not easily solved by software, and there have been many failed attempts at finding the *one true way*.
