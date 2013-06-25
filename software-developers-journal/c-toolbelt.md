@@ -170,14 +170,23 @@ There are many other options, including **Jenkins**, **TeamCity**, and **Bamboo*
 
 
 ### Dependency Management
+C has been around for almost 40 years now, and vast quantities of high-quality code have been written and released as open source.
+It seems like you should be able to use a lot of that work in your own project.
 
-**TODO?**
+Other languages have made this really easy.
+Ruby has gems, Node has npm, C# has NuGet.
+Unfortunately, there isn't anything like this for C.
+Mostly this is because C is so structureless and malleable, and there's no *best* way to make a reusable library.
+Probably the most pragmatic way to take a dependency on an external library or toolkit is to pull in its source code using your version control tool (**git submodule** or the like), and compile it as part of your build.
+Every situation is different, and every library has a different way of building, so you'll have to do most of the legwork yourself.
 
 
 ## Learning
 
 
+
 ### CDecl
+
 http://cdecl.org/
 
 ## Conclusion
