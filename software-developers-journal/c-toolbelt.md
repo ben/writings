@@ -169,16 +169,110 @@ C doesn't have many features that make writing those tests easier or more concis
 You can start completely from scratch if you like, but I recommend using a framework.
 My personal favorite is **Clar**, which requires Python to be installed, but parses your source code and builds the suites and runners for you based on naming conventions.
 This makes it feel like you're writing in Ruby with no boilerplate.
-Others are available if you don't like Clar's style; try **Check** or **CUnit**; both require more boilerplate, but there's less magic.
+Listing 1 shows a sample Clar test suite.
+
+##### Listing 1
+```c
+#include "clar.h"
+
+// This test file is named sample/first.c, thus the 
+// function name prefixes
+
+// Fixture set-up and tear-down. These run between every test case.
+void test_sample_first__initialize(void)
+{}
+void test_sample_first__cleanup(void)
+{}
+
+// Names that don't begin with test_sample_first__ are ignored by clar
+int a_utility(int x)
+{
+	return x - 12;
+}
+
+// A test case
+void test_sample_first__a_simple_test(void)
+{
+	cl_assert_equal_i(0, a_utility(12));
+}
+
+```
+
+Other frameworks are available if you don't like Clar's style; try **Check** or **CUnit**; both require more boilerplate, but there's less magic.
 
 
 ### Continuous Integration
 Once you have a suite of automated tests, you'll want to run them as often as you can.
 Usually each developer will make sure their work doesn't break the tests before they push it to the rest of the team, but especially if your code is meant to compile and run in multiple environments, it's useful to have a machine do all the drudgery of checking every combination.
 
-If your code is hosted on GitHub, **Travis CI** (which is free if your project is open source) will even run the test script on every pull request, which is invaluable for accepting contributions from strangers.
-There are many other options, including **Jenkins**, **TeamCity**, and **Bamboo**.
+There are many options in this space, both free and commercial.
+Some of the most popular are **Jenkins**, **TeamCity**, and **Bamboo**.
+If your code is hosted on GitHub, **Travis CI** (which is free for public repostories) will even run the test script on *every pull request*, which is invaluable for accepting contributions from strangers.
+Listing 2 shows the `.travis.yml` file from libgit2, including the Valgrind post-step.
 
+##### Listing 2
+```yaml
+# Travis-CI Build for libgit2
+# see travis-ci.org for details
+
+# As CMake is not officially supported we use C VMs
+language: c
+
+compiler:
+  - gcc
+  - clang
+
+# Settings to try
+env:
+  - OPTIONS="-DTHREADSAFE=ON -DCMAKE_BUILD_TYPE=Release"
+  - OPTIONS="-DBUILD_CLAR=ON -DBUILD_EXAMPLES=ON"
+
+matrix:
+ include:
+   - compiler: i586-mingw32msvc-gcc
+     env: OPTIONS="-DBUILD_CLAR=OFF -DWIN32=ON -DMINGW=ON"
+
+# Make sure CMake is installed
+install:
+ - sudo apt-get update >/dev/null
+ - sudo apt-get -q install cmake valgrind
+
+# Run the Build script
+script:
+ - mkdir _temp
+ - git init --bare _temp/test.git
+ - git daemon --listen=localhost --export-all --enable=receive-pack --base-path=_temp _temp 2>/dev/null &
+ - export GITTEST_REMOTE_URL="git://localhost/test.git"
+ - mkdir _build
+ - cd _build
+ - cmake .. -DCMAKE_INSTALL_PREFIX=../_install $OPTIONS
+ - cmake --build . --target install
+ - ctest -V .
+
+# Run Tests
+after_success:
+ - valgrind --leak-check=full --show-reachable=yes --suppressions=../libgit2_clar.supp ./libgit2_clar -ionline
+
+# Only watch the development branch
+branches:
+ only:
+   - development
+
+# Notify development list when needed
+notifications:
+ irc:
+  channels:
+    - irc.freenode.net#libgit2
+  on_success: change
+  on_failure: always
+  use_notice: true
+  skip_join: true
+ campfire:
+  on_success: always
+  on_failure: always
+  rooms:
+   - secure: "sH0dpPWMirbEe7AvLddZ2yOp8rzHalGmv0bYL/LIhVw3JDI589HCYckeLMSB\n3e/FeXw4bn0EqXWEXijVa4ijbilVY6d8oprdqMdWHEodng4KvY5vID3iZSGT\nxylhahO1XHmRynKQLOAvxlc93IlpVW38vQfby8giIY1nkpspb2w="
+```
 
 ### Dependency Management
 C has been around for almost 40 years now, and vast quantities of high-quality code have been written and released as open source.
