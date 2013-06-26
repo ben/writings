@@ -1,9 +1,9 @@
 # A C Developer's Utility Belt
 
-**Jealousy** is an emotion commonly associated with C.
-Developing in other languages is just so *nice*.
+**Jealousy** is an emotion commonly associated with C developers.
+It's easy to see why; developing in other languages is just so *nice*.
 Automated refactoring, dynamic reloading, garbage collection, exceptions, object-orientation, lambdas…
-You give up a lot to work in C.
+You've got to give up a lot to work in C.
 
 But it doesn't have to suck.
 You don't have to leave **all** your best tools behind.
@@ -13,10 +13,10 @@ These are things that help make software projects *in any language* successful, 
 But first, before you start writing code, there are a couple of questions you should ask yourself.
 
 
-### What are you making?
+### What are you building?
 What form does your final product take?
 Is your software installed on strangers' computers, or does it run on a server under your control?
-There are many ways to ask this question, but it boils down to whether what you're shipping is source code.
+There are many ways to ask this question, but it boils down to just one: *"Are you shipping source code, or binaries?"*
 
 Distributing pre-built binaries has some advantages.
 If you want to keep your source code secret, this is the clear choice; it's difficult to recover source code from a compiled binary, so much so that you can think of an optimizing compiler as a sort of weak encryption tool.
@@ -69,11 +69,13 @@ If your project is open-source and needs to *build* on strangers' computers, you
 
 If you need to support more than one compiler or development environment, it's worth considering using a meta-build tool such as **CMake** or **gyp**.
 These allow you to define your project in general terms (*these* are the source files, *this* is what the output name should be, etc.), and the tool can generate a variety of project files, and even build the system for you using the toolchain that's available.
-There's effort involved in writing and maintaining the meta-project file, but it can more than pay for itself by providing access to many different environments.
+There's effort involved in writing and maintaining the meta-project file, but it can more than pay for itself by providing access to many different environments, even if only temporarily (see below).
 This approach also lets you avoid maintaining multiple tool-specific project files, and allows people working on the code to choose the environment that works best for them.
 
-If you google for these things, you'll probably run across autotools.
-Try to think of it in the same terms as RCS or CVS; at this point in time, there's almost no reason to use a tool that byzantine and difficult, when so many better options exist.
+**TODO: example**
+
+If you google for meta-build tools, you'll probably run across *Autotools*.
+Try to think of it in the same terms as *RCS* or *CVS* (see below); at this point in time, there's almost no reason to use a tool so byzantine and difficult, when so many better options exist.
 
 
 ### Editors
@@ -81,7 +83,7 @@ One's choice of text editor is a very personal matter, but it must be said that 
 
 IDEs such as **Microsoft Visual Studio**, **Eclipse CDT** or **XCode** can be very useful.
 They have extensive tools for graphical debugging, performance measurement, syntax-aware code navigation, and a host of other useful features.
-These tools are designed around the edit-compile-run cycle, and common tasks are made very easy.
+These tools are designed around the *"edit-compile-run"* cycle, and common tasks are made very easy.
 Their main drawback is their specificity; it's difficult to get Visual Studio to work with another toolchain, or to compile a binary for Linux, for example.
 
 Raw-text powerhouses like **Emacs** and **Vim** are much better at raw text manipulation, with features like macro recording and ultimate customizability.
@@ -97,9 +99,10 @@ Many compiler toolchains come with a debugger (gcc comes with **gdb**, clang wit
 There is a steep learning curve with CLI-based debugging tools, but climbing it can be well worth your time.
 As with Vim or Emacs, you gain intimate understanding and muscle-memory speed when you choose a tool designed for use with only a keyboard.
 
-Another approach is to use a meta-project generator to create a project file for an IDE.
-Most of your day-to-day editing can be done with your favorite editor, and when you need the specialized tools included with Xcode, for example, you simply generate a project file.
-Using a meta-build tool, even if you're only planning on building with one compiler, can make it possible to use the best tool for each job, rather than being stuck with the tools you chose on day one.
+Occasionally, you'll run across a problem that's *much* easier to solve in a different debugger.
+This is a case where using a meta-project generator can save you many hours.
+You may do most of your editing with your favorite editor, and when you need the specialized tools included with Xcode, for example, you simply generate a project file.
+Even if you're only planning on building with one compiler, this technique can make it possible to use the best tool for each job, rather than being stuck with the tools you chose on day one.
 
 
 ### Analyzers
@@ -132,7 +135,7 @@ One thing you'll need, without exception, is a version control system (VCS).
 Choosing one seems fairly arbitrary at first, but the capabilities of your tool will shape the kinds of actions you can take later on.
 I highly recommend using one of the newest generation, so-called "distributed" version control tools, like **Git** or **Mercurial**.
 Your team may grumble if they're not used to them, but within a few months they probably won't be able to imagine going back to a centralized system.
-But please don't use RCS or CVS; there's no reason to choose them over something like **Subversion**.
+But please don't use *RCS* or *CVS*; there's no reason to choose them over something like **Subversion**.
 
 You'll also need to be able to communicate with your team, both asynchronously and in real-time.
 Asynchronous tools include things like bug trackers, discussion boards, wikis, and even the API documentation extracted from code comments.
@@ -142,7 +145,8 @@ Each kind of tool has its place, but your choice of which to use will be informe
 You'll also need synchronous communication for rapid feedback.
 If your team consists of one person, or work in the same physical space, this problem is already solved; humans are great at sharing ideas in an environment such as this.
 But if neither of these facts is 100% true, you'll need some software to back you up.
-This is generally called *chat software*, and includes things like **IRC**, **Campfire**, and **HipChat**.
+This is generally called *chat software*, and includes things like **Campfire** and **HipChat**.
+**IRC** can also be useful, but it lacks a critical capability: full, searchable transcripts.
 
 The ecosystem for collaboration tools is both broad and deep.
 If you want a curated set of collaboration tools, a bundle of decisions that have already been made for you and wrapped up with a bow, you can find that too.
@@ -215,7 +219,7 @@ It's also fun to help out other newbies while you're there.
 The declaration syntax for C can sometimes be confusing, and some of the grammatical rules are hard to remember.
 If you find yourself trapped in a maze of twisty little `const`s, all alike, you can use **cdecl** to find your way out.
 Cdecl is a command-line tool that translates between dense C syntax and (mostly) plain English.
-You can install it on your workstation, or try it out at cdecl.org.
+You can install it on your workstation, or try it out at *http://cdecl.org*.
 
 
 ### Reading Code
