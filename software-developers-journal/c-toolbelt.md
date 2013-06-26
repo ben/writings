@@ -71,8 +71,63 @@ If you need to support more than one compiler or development environment, it's w
 These allow you to define your project in general terms (*these* are the source files, *this* is what the output name should be, etc.), and the tool can generate a variety of project files, and even build the system for you using the toolchain that's available.
 There's effort involved in writing and maintaining the meta-project file, but it can more than pay for itself by providing access to many different environments, even if only temporarily (see below).
 This approach also lets you avoid maintaining multiple tool-specific project files, and allows people working on the code to choose the environment that works best for them.
+Listing 1 shows a the gyp file for a project called node-gitteh.
+It's deceivingly simple, but can generate projects for around a dozen build systems.
 
-**TODO: example**
+##### Listing 1
+```json
+{
+	'targets': [
+		{
+			'target_name': 'gitteh',
+			'sources': [
+				'src/gitteh.cc',
+				'src/signature.cc',
+				'src/repository.cc',
+				'src/baton.cc',
+				'src/commit.cc',
+				'src/tree.cc',
+				'src/blob.cc',
+				'src/tag.cc',
+				'src/remote.cc',
+				'src/index.cc',
+			],
+			'todosources': [
+				'src/index_entry.cc',
+				'src/tag.cc',
+				'src/rev_walker.cc',
+				'src/ref.cc',
+			],
+
+			'include_dirs': [
+				'deps/v8-convert',
+				'deps/libgit2/include'
+			],
+
+			'libraries': [
+				'-L<!(pwd)/deps/libgit2/build',
+				'-lgit2'
+			],
+
+			'cflags': [
+				'-Wall'
+			],
+
+			'ldflags': [
+				'-Wl,-rpath,\$$ORIGIN/../../deps/libgit2/build'
+			],
+
+			'conditions': [
+				['OS=="mac"', {
+					'xcode_settings': {
+						'GCC_ENABLE_CPP_EXCEPTIONS': 'YES'
+					}
+				}]
+			]
+		}
+	]
+}
+```
 
 If you google for meta-build tools, you'll probably run across *Autotools*.
 Try to think of it in the same terms as *RCS* or *CVS* (see below); at this point in time, there's almost no reason to use a tool so byzantine and difficult, when so many better options exist.
@@ -169,9 +224,9 @@ C doesn't have many features that make writing those tests easier or more concis
 You can start completely from scratch if you like, but I recommend using a framework.
 My personal favorite is **Clar**, which requires Python to be installed, but parses your source code and builds the suites and runners for you based on naming conventions.
 This makes it feel like you're writing in Ruby with no boilerplate.
-Listing 1 shows a sample Clar test suite.
+Listing 2 shows a sample Clar test suite.
 
-##### Listing 1
+##### Listing 2
 ```c
 #include "clar.h"
 
@@ -208,9 +263,9 @@ Usually each developer will make sure their work doesn't break the tests before 
 There are many options in this space, both free and commercial.
 Some of the most popular are **Jenkins**, **TeamCity**, and **Bamboo**.
 If your code is hosted on GitHub, **Travis CI** (which is free for public repostories) will even run the test script on *every pull request*, which is invaluable for accepting contributions from strangers.
-Listing 2 shows the `.travis.yml` file from libgit2, including the Valgrind post-step.
+Listing 3 shows the `.travis.yml` file from libgit2, including the Valgrind post-step.
 
-##### Listing 2
+##### Listing 3
 ```yaml
 # Travis-CI Build for libgit2
 # see travis-ci.org for details
