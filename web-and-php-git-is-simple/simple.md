@@ -18,7 +18,7 @@ You just want to write your code, and every once in a while save a snapshot to s
 The underlying data model is complicated, and you rarely (if ever) need to know what it is, because the UI is pretty effective at abstracting those details away.
 
 With Git, the story is a little different.
-The metaphor it presents is a directed acyclic graph (DAG) of commit nodes, which is to say there *is* no metaphor – the DAG actually is the data model.
+The metaphor it presents is a directed acyclic graph (DAG) of commit nodes, which is to say there *is* no metaphor – the data model actually is a DAG.
 If you try to re-use the metaphor you learned from another system, you're going to run into trouble.
 
 The good news is that this data model is easy to understand, and that figuring it out will make you better at using Git.
@@ -26,7 +26,7 @@ The good news is that this data model is easy to understand, and that figuring i
 
 ## Objects
 
-Just about everything in a git repository is either an **object**  or a **ref**.
+Just about everything in a Git repository is either an **object**  or a **ref**.
 
 Objects are how Git stores content.
 They're stored in `.git/objects`, which is sometimes called the *object database* or *ODB*.
@@ -119,6 +119,7 @@ See how simple this is?
 ## Refs
 
 References (or *refs*) are nothing more than pointers to objects or other refs.
+They consist of two pieces of information: the name of the ref, and where it points.
 If a ref points to an object, it's called a *direct ref*; if it points to another ref, it's called a *symbolic ref*.
 
 Most refs are direct.
@@ -129,7 +130,7 @@ $ cat .git/refs/heads/master
 2b67270f960563c55dd6c66495517bccc4f7fb17
 ```
 
-Git also keeps around a few refs for specific purposes.
+Git also keeps around a few symbolic refs for specific purposes.
 The most commonly useful one is `HEAD`, which usually points to the branch you have checked out:
 
 ```
@@ -137,14 +138,67 @@ $ cat HEAD
 ref: refs/heads/master
 ```
 
+Now that we know how refs work, let's take another stab at that tag annotation object we saw earlier.
+Remember that refs are basically just names for locations; there's no commentary associated with them, and you can change them at any time.
+Tag annotations solve both of these issues by putting ref-like information into the ODB (making it immutable, and allowing it to have more content), then making it findable by attaching a regular tag ref to it.
+The whole scheme looks like this:
+
+```
+tag (ref)  -->  tag_ann (odb)  -->  commit
+```
+
+Note that this opens up a whole new universe of possibility: refs don't have to point to *commits*.
+They can point to *any* kind of object, which means you could technically set up something like this (though it's not clear why you'd want to):
+
+```
+branch --> tag --> tag_ann_a --> tag_ann_b --> blob
+```
+
 
 ## Three Trees
 
-Knowing these things can make some of Git's commands make a lot more sense.
+Tree-type objects in the ODB aren't the only tree that Git likes to think about.
+During your day-to-day work, you'll deal with three of them: HEAD, the index, and the work tree.
 
-***TODO***
+**HEAD** is the last commit that was made, and it's the parent of your next commit.
+Technically, it's a symbolic ref that points to the branch you're on, which points to the last commit, but for the purposes of this section we'll simplify a bit.
+
+The **index** is a proposal for the next commit.
+When you do a checkout, Git copies the HEAD tree to the index, and when you type `git commit -m 'foo'`, it's going to take what's in the index and store it in the ODB as the new commit's tree.
+
+The **work tree** is a sandbox.
+You can safely create, update, and delete files at will in this area, knowing that Git has backups of everything.
+This is how Git makes your content available to the rest of the universe of tools.
+
+There are a few commands whose job is mainly to deal with these three trees.
+
+* `git add`
+* `git checkout`
+* `git commit`
+
+Even reset becomes knowable using this framework.
+Reset has three jobs:
+
+1. Move HEAD (and the branch it points to) to point to a different commit
+1. Update the index to have the contents from HEAD
+1. Update the work tree to have the contents from the index
+
+And, through some poorly-named command-line options, you can choose where it stops.
+
+* `git reset --soft` will stop after step 1.
+  HEAD and the checked-out branch are moved, but that's all.
+* `git reset --mixed` stops after step 2.
+  The work tree isn't touched at all, but HEAD and the index are.
+  This is actually reset's default; the `--mixed` argument is optional.
+* `git reset --hard` performs all three steps.
+  After the first two, the work tree is overwritten with what's in the index.
+  
+If you use reset with a path (``)
 
 
 ## Tying it all together
 
-***TODO***
+With this perspective, a few things about Git become more clear.
+For example, the two-stage commit process, where you have to `git add` before you `git commit` – you're setting up a proposal for your next commit, and then storing it in the history.
+
+This also helps understand what
