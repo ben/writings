@@ -1,4 +1,4 @@
-> Tagline
+> Git Internals for the Rest of Us
 
 > # Git is Simple
 
