@@ -172,18 +172,37 @@ This is how Git makes your content available to the rest of the universe of tool
 
 There are a few commands whose job is mainly to deal with these three trees.
 
-* `git add`
-* `git checkout`
-* `git commit`
+* `git checkout` – Copies content from HEAD into the index and work tree.
+  It can also move HEAD first.
+* `git add` – Copies content from the work tree to the index.
+* `git commit` – Copies content from the index to HEAD.
 
-Even reset becomes knowable using this framework.
-Reset has three jobs:
+
+
+## Things are Better Now
+
+Now that we know a few things, some of Git's seemingly-strange commands start to make sense.
+Take committing, with the weird staging area.
+Here's what's actually happening:
+
+1. The working tree gets modified as you change your code.
+1. You use `git add` to build up a proposal for the next commit.
+  You can even do this with only some of the changes from a file, leaving others in the work tree but not in the index.
+1. You use `git commit`, which:
+  * Stores new trees and blobs to the ODB, re-using ones that haven't changed.
+  * Creates a new commit which points to the new tree, and includes your comments.
+  * Moves HEAD (and the ref it points to) to the new commit.
+
+And now you can start back at step 1.
+
+Another example is `git reset`, one of the most hated and feared commands in all of Git.
+Reset generally performs three steps:
 
 1. Move HEAD (and the branch it points to) to point to a different commit
 1. Update the index to have the contents from HEAD
 1. Update the work tree to have the contents from the index
 
-And, through some poorly-named command-line options, you can choose where it stops.
+And, through some oddly-named command-line options, you can choose where it stops.
 
 * `git reset --soft` will stop after step 1.
   HEAD and the checked-out branch are moved, but that's all.
@@ -193,12 +212,16 @@ And, through some poorly-named command-line options, you can choose where it sto
 * `git reset --hard` performs all three steps.
   After the first two, the work tree is overwritten with what's in the index.
   
-If you use reset with a path (``)
+If you use reset with a path, Git actually skips the first step, since moving HEAD is a whole-repository operation.
+The other two steps apply, though; `--mixed` will update the index with HEAD's version of the file, and `--hard` also updates the working directory, effectively trashing any modifications you've made to the file since it was checked out.
 
 
-## Tying it all together
 
-With this perspective, a few things about Git become more clear.
-For example, the two-stage commit process, where you have to `git add` before you `git commit` – you're setting up a proposal for your next commit, and then storing it in the history.
+## Go Forth
 
-This also helps understand what
+With most version-control systems, you're encouraged to just get to know the UI layer, and the details will be safely abstracted away.
+Git is different; its basic data model is at a high enough level that it's pretty easy to understand, and its UI layer is so thin, that you'll find yourself learning the internals whether you want to or not – you'll need to for everything except the bare minimum of usage.
+I hope this article has convinced you that there isn't really that much to know, and that you earn many new abilities by going through this process.
+
+Your new understanding has made you powerful.
+Please use your new powers for good.
