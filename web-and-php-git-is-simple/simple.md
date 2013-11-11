@@ -179,23 +179,10 @@ There are a few commands whose job is mainly to deal with these three trees.
 
 
 
-## Things are Better Now
+## Reset is Easier Now
 
 Now that we know a few things, some of Git's seemingly-strange commands start to make sense.
-Take committing, with the weird staging area.
-Here's what's actually happening:
-
-1. The working tree gets modified as you change your code.
-1. You use `git add` to build up a proposal for the next commit.
-  You can even do this with only some of the changes from a file, leaving others in the work tree but not in the index.
-1. You use `git commit`, which:
-  * Stores new trees and blobs to the ODB, re-using ones that haven't changed.
-  * Creates a new commit which points to the new tree, and includes your comments.
-  * Moves HEAD (and the ref it points to) to the new commit.
-
-And now you can start back at step 1.
-
-Another example is `git reset`, one of the most hated and feared commands in all of Git.
+One example is `git reset`, one of the most hated and feared commands in all of Git.
 Reset generally performs three steps:
 
 1. Move HEAD (and the branch it points to) to point to a different commit
@@ -215,6 +202,33 @@ And, through some oddly-named command-line options, you can choose where it stop
 If you use reset with a path, Git actually skips the first step, since moving HEAD is a whole-repository operation.
 The other two steps apply, though; `--mixed` will update the index with HEAD's version of the file, and `--hard` also updates the working directory, effectively trashing any modifications you've made to the file since it was checked out.
 
+
+## The Everyday Pattern
+
+Let's take a look at a really common usage pattern with our new Git X-ray goggles on.
+
+```
+$ git checkout -b bug-2345 master
+```
+
+Git creates a new branch called `bug-2345`, and points it at the same commit `master` points to. Then it moves HEAD to point to `bug-2345`, and updates the index and work tree to match HEAD.
+
+You do some work, changing the files in the work tree, and now you're ready to make a commit.
+
+```
+$ git add foo.txt
+$ git add -p bar.html
+```
+
+Git updates the index to match the contents of the work tree.
+You can even update it with only *some* of the changes from a file.
+
+```
+$ git commit -m 'Update foo and bar'
+```
+
+Git converts the index into a series of linked objects in the ODB. Blobs and trees whose contents match are re-used, and the files and directories that changed have new blobs and trees generated for them.
+Git then creates a new commit which points to the new root tree, and (since HEAD points to a branch) `but-2345` is moved to point to the new commit.
 
 
 ## Go Forth
