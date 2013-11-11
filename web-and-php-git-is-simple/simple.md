@@ -228,7 +228,7 @@ $ git commit -m 'Update foo and bar'
 ```
 
 Git converts the index into a series of linked objects in the ODB. Blobs and trees whose contents match are re-used, and the files and directories that changed have new blobs and trees generated for them.
-Git then creates a new commit which points to the new root tree, and (since HEAD points to a branch) `but-2345` is moved to point to the new commit.
+Git then creates a new commit which points to the new root tree, and (since HEAD points to a branch) `bug-2345` is moved to point to the new commit.
 
 
 ## Go Forth
